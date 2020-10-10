@@ -7,7 +7,9 @@
   },
   "rules": {
     "semi": "off",
-    "linebreak-style": ["error", "windows"]
+    "linebreak-style": ["error", "windows"],
+    "comma-dangle": "off",
+    'require-jsdoc': "off"
   },
   "extends": ["eslint:recommended", "google"]
 }
