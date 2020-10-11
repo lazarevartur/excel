@@ -6,18 +6,23 @@ export class Excel {
     this.components = options.components || []
   }
   getRoot() {
-    const root = $.create('div', 'excel')
+    const $root = $.create('div', 'excel')
 
-    this.components.forEach((Component) => {
+    this.components = this.components.map((Component) => {
       const $el = $.create('div', Component.className)
       const component = new Component($el);
       $el.html(component.toHtml())
-      root.append($el)
+      $root.append($el)
+      return component
     })
 
-    return root
+    return $root
   }
   render() {
     this.$el.append(this.getRoot())
+
+    this.components.forEach((component) => {
+      component.init();
+    })
   }
 }
