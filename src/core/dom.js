@@ -21,6 +21,15 @@ class Dom {
   off(eventType, callback) {
     this.$nativeElement.removeEventListener(eventType, callback)
   }
+  closest(selector) {
+    return $(this.$nativeElement.closest(selector))
+  }
+  getCoordinate() {
+    return this.$nativeElement.getBoundingClientRect()
+  }
+  get data() {
+    return this.$nativeElement.dataset
+  }
   append(node) {
     if (node instanceof Dom) {
       node = node.$nativeElement
