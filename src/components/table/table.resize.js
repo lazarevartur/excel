@@ -1,48 +1,42 @@
 import {$} from '@core/dom';
+import {cordMouse} from '@core/util';
+import {deltaValue} from '@/components/table/table.function';
 
-export function resizeCollum(event) {
-  const $parent = $(event.target).closest('[data-type="resizebl"]')
-  const $resibleFlag = event.target
-  const $line = $resibleFlag.firstChild.nextSibling
-  const className = 'line-height'
+export function tableResize($root, event) {
+  const $resizer = $(event.target)
+  const type = $resizer.data.resize
+  const $parent = $resizer.closest('[data-type="resizebl"]')
   const cords = $parent.getCoordinate()
-  const cols = document.querySelectorAll(`[data-col="${$parent.data.col}"]`)
-  let value = '';
-  $resibleFlag.style.opacity = 1
+  const $line = $resizer.$nativeElement.firstChild
+  const sideProp = type === 'row' ? 'top' : 'left'
+  let className; let value; let cordinate
+  $resizer.css({opacity: 1})
+  if (type === 'row') {
+    className = 'line-width'
+    cordinate = 'y'
+  } else if (type === 'collum') {
+    className = 'line-height'
+    cordinate = 'x'
+  }
   $line.classList.add(className)
   document.onmousemove = (e) => {
-    const delta = e.pageX - cords.right
-    value = cords.width + delta
-    $resibleFlag.style.left = value + 'px'
-  }
-  document.onmouseup = (e) => {
-    cols.forEach((e) => {
-      e.style.width = value + 'px'
-    })
-    $resibleFlag.removeAttribute('style')
-    $line.classList.remove(className)
-    document.onmousemove = null
-  }
-}
-export function resizeRow(event) {
-  const $parent = $(event.target).closest('[data-type="resizebl"]')
-  const $resibleFlag = event.target
-  const $line = $resibleFlag.firstChild
-  const className = 'line-width'
-  const cords = $parent.getCoordinate()
-  let value = '';
-  $resibleFlag.style.opacity = 1
-  $line.classList.add(className)
-  document.onmousemove = (e) => {
-    const delta = e.pageY - cords.bottom
-    value = cords.height + delta
-    $resibleFlag.style.top = value + 'px'
+    value = deltaValue(cords, cordMouse(e, cordinate), type) + 'px'
+    $resizer.css({[sideProp]: value})
   }
   document.onmouseup = (event) => {
-    $parent.$nativeElement.style.height = value + 'px'
-    $resibleFlag.removeAttribute('style')
+    if (type === 'row') {
+      $parent.css({height: value})
+    } else {
+      $root.findAll(
+          `[data-col="${$parent.data.col}"]`
+      ).forEach((e) => {
+        $(e).css({width: value})
+      })
+    }
+    $resizer.$nativeElement.removeAttribute('style')
     $line.classList.remove(className)
     document.onmousemove = null
+    document.onmouseup = null
   }
 }
 

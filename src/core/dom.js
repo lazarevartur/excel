@@ -27,6 +27,16 @@ class Dom {
   getCoordinate() {
     return this.$nativeElement.getBoundingClientRect()
   }
+  findAll(selector) {
+    return this.$nativeElement.querySelectorAll(selector)
+  }
+  css(style= {}) {
+    Object
+        .keys(style)
+        .forEach((key) => {
+          this.$nativeElement.style[key] = style[key]
+        })
+  }
   get data() {
     return this.$nativeElement.dataset
   }

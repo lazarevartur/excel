@@ -1,6 +1,7 @@
 import {ExcelComponent} from '@core/ExcelComponent';
 import {createTable} from '@/components/table/table.template';
-import {resizeCollum, resizeRow} from '@/components/table/table.resize';
+import {tableResize} from '@/components/table/table.resize';
+import {shouldResize} from '@/components/table/table.function';
 
 export class Table extends ExcelComponent {
   static className = 'excel__table'
@@ -13,15 +14,12 @@ export class Table extends ExcelComponent {
   }
 
   toHtml() {
-    return createTable(33)
+    return createTable(20)
   }
 
   onMousedown(event) {
-    const resize = event.target.dataset.resize
-    if (resize === 'collum') {
-      resizeCollum(event)
-    } else if (resize === 'row-info') {
-      resizeRow(event)
+    if (shouldResize(event)) {
+      tableResize(this.$root, event)
     }
   }
 }
