@@ -21,6 +21,25 @@ class Dom {
   off(eventType, callback) {
     this.$nativeElement.removeEventListener(eventType, callback)
   }
+  closest(selector) {
+    return $(this.$nativeElement.closest(selector))
+  }
+  getCoordinate() {
+    return this.$nativeElement.getBoundingClientRect()
+  }
+  findAll(selector) {
+    return this.$nativeElement.querySelectorAll(selector)
+  }
+  css(style= {}) {
+    Object
+        .keys(style)
+        .forEach((key) => {
+          this.$nativeElement.style[key] = style[key]
+        })
+  }
+  get data() {
+    return this.$nativeElement.dataset
+  }
   append(node) {
     if (node instanceof Dom) {
       node = node.$nativeElement
