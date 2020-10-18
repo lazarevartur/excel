@@ -12,11 +12,17 @@ function createRow(content, index) {
   <div class="row-data">${content}</div>
 </div>`
 }
-function toCell(_, indexColl) {
-  const data = `data-col="${indexColl+1}""`
-  return `
-  <div class="cell" ${data} contenteditable="true"></div>
-  `
+function toCell(row) {
+  return (_, indexColl) => {
+    return `
+    <div
+    class="cell"
+    contenteditable="true"
+    data-col='${indexColl}'
+    data-id='${row}:${indexColl}'
+    ></div>
+    `
+  }
 }
 function toCol(content, index) {
   return `<div class="column" data-type="resizebl" data-col="${index+1}">
@@ -39,12 +45,12 @@ export function createTable(rowCount = 15) {
       .map(toCol)
       .join('')
   rows.push(createRow(cols))
-  for (let i = 0; i < rowCount; i++) {
+  for (let row = 0; row < rowCount; row++) {
     const cells = new Array(collumCount)
         .fill('')
-        .map(toCell)
+        .map(toCell(row))
         .join('')
-    rows.push(createRow(cells, i+1))
+    rows.push(createRow(cells, row+1))
   }
   return rows.join('')
 }

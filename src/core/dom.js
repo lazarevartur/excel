@@ -40,12 +40,35 @@ class Dom {
   get data() {
     return this.$nativeElement.dataset
   }
+  id(parse) {
+    if (parse) {
+      const parsed = this.id().split(':')
+      return {
+        row: +parsed[0],
+        col: +parsed[1]
+      }
+    }
+    return this.data.id
+  }
+  focus() {
+    this.$nativeElement.focus()
+    return this
+  }
   append(node) {
     if (node instanceof Dom) {
       node = node.$nativeElement
     }
     this.$nativeElement.append(node)
     return this
+  }
+  find(selector) {
+    return $(this.$nativeElement.querySelector(selector))
+  }
+  add(className) {
+    return this.$nativeElement.classList.add(className)
+  }
+  remove(className) {
+    return this.$nativeElement.classList.remove(className)
   }
 }
 
