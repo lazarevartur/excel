@@ -52,11 +52,11 @@
     color: #111;
     white-space: nowrap;
 
-    &.selected{
-      border: none;
-      outline: 2px solid $color-resize-selected;
-      z-index: 2;
-    }
+  }
+  .selected{
+    border: none;
+    outline: 2px solid $color-resize-selected;
+    z-index: 2;
   }
   .row-resize, .column-resize{
     position: absolute;
