@@ -25,7 +25,7 @@ function toCell(row) {
   }
 }
 function toCol(content, index) {
-  return `<div class="column" data-type="resizebl" data-col="${index+1}">
+  return `<div class="column" data-type="resizebl" data-col="${index}">
           ${content}
           <div class="column-resize" data-resize="collum"><div></div>
           </div>

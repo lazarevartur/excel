@@ -11,6 +11,16 @@ class Dom {
     }
     return this.$nativeElement.outerHTML.trim()
   }
+  text(text) {
+    if (typeof text === 'string') {
+      this.$nativeElement.textContent = text
+      return this
+    }
+    if (this.$nativeElement.tagName.toLowerCase() === 'input') {
+      return this.$nativeElement.value.trim()
+    }
+    return this.$nativeElement.textContent.trim()
+  }
   clear() {
     this.html('')
     return this
@@ -65,10 +75,12 @@ class Dom {
     return $(this.$nativeElement.querySelector(selector))
   }
   add(className) {
-    return this.$nativeElement.classList.add(className)
+    this.$nativeElement.classList.add(className)
+    return this
   }
   remove(className) {
-    return this.$nativeElement.classList.remove(className)
+    this.$nativeElement.classList.remove(className)
+    return this
   }
 }
 
