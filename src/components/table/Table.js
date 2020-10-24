@@ -4,6 +4,7 @@ import {tableResize} from '@/components/table/table.resize';
 import {isCell, shouldResize, matrix} from '@/components/table/table.function';
 import {TableSelection} from '@/components/table/TableSelection';
 import {$} from '@core/dom';
+import * as actions from '@/redux/action'
 
 export class Table extends ExcelComponent {
   static className = 'excel__table'
@@ -22,7 +23,6 @@ export class Table extends ExcelComponent {
   init() {
     super.init();
     this.$on('formula:input', (text) => {
-      console.log(text)
       this.selection.current.text(text)
     })
 
@@ -38,9 +38,22 @@ export class Table extends ExcelComponent {
     return createTable(20)
   }
 
+  selectCell($cell) {
+    this.selection.select($cell)
+    this.$emit('table:select', $cell)
+  }
+  async resizeTable(event) {
+    try {
+      const data = await tableResize(this.$root, event)
+      this.$dispatch(actions.tableResize(data))
+    } catch (e) {
+      console.warn('Resize error', e.message)
+    }
+  }
+
   onMousedown(event) {
     if (shouldResize(event)) {
-      tableResize(this.$root, event)
+      this.resizeTable(event)
     } else if (isCell(event)) {
       const $cell = $(event.target)
       if (event.shiftKey) {
@@ -50,8 +63,7 @@ export class Table extends ExcelComponent {
         const $cells = ids.map((id) => this.$root.find(`[data-id="${id}"]`))
         this.selection.groupSelect($cells)
       } else {
-        this.selection.select($cell)
-        this.$emit('table:select', $cell)
+        this.selectCell($cell)
       }
     }
   }
@@ -70,8 +82,7 @@ export class Table extends ExcelComponent {
       const current = this.selection.current.id(true)
       const id = nextCell(key, current)
       const $next = this.$root.find(`[data-id="${id}"]`)
-      this.selection.select($next)
-      this.$emit('table:select', $next)
+      this.selectCell($next)
     }
   }
   onInput(event) {
